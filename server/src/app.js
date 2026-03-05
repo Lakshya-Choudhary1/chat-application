@@ -14,18 +14,16 @@ const whitelist_urls = process.env.WHITELIST_URLS
   : [];
 
 //routes
-app.use(
-  helmet({
-    contentSecurityPolicy: {
-      directives: {
-        defaultSrc: ["'self'"],
-        imgSrc: ["'self'", "data:", "https://res.cloudinary.com"],
-        scriptSrc: ["'self'", "'unsafe-inline'"],
-        styleSrc: ["'self'", "'unsafe-inline'"],
-      },
+helmet({
+  contentSecurityPolicy: {
+    directives: {
+      defaultSrc: ["'self'"],
+      imgSrc: ["'self'", "data:", "https://res.cloudinary.com"],
+      scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'"],
+      styleSrc: ["'self'", "'unsafe-inline'"],
     },
-  })
-);
+  },
+})
 app.use(
   cors({
     origin: (origin, callback) => {
@@ -53,11 +51,14 @@ app.get("/test",(req,res)=>{
   return res.status(200).json({test:"successfull"})
 })
 
-  app.use(express.static(resolve(__dirname,'../public')))
-  app.use((req, res) => {
-    res.sendFile(resolve(__dirname ,'../public','index.html'));
-  });
+const publicPath = resolve(__dirname, "../public");
 
+app.use(express.static(publicPath));
+
+app.use((req, res) => {
+  res.sendFile(join(publicPath, "index.html"));
+});
+  
  
 
 
