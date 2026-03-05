@@ -4,8 +4,10 @@ import tailwindcss from "@tailwindcss/vite"
 import path from "path"
 
 export default defineConfig({
+  base:"./",
   plugins: [react(), tailwindcss()],
   build: {
+    
     outDir: path.resolve(__dirname, "../server/public"),
     emptyOutDir: true
   }
