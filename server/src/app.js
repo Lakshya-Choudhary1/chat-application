@@ -57,8 +57,8 @@ console.log('Serving static files from:', publicPath);
 // Serve static files
 app.use(express.static(publicPath));
 
-app.use((req,res)=>{
-  res.sendFile(join(publicPath, "index.html"));
+app.get("/",(req,res)=>{
+  return res.sendFile(join(publicPath, "index.html"));
 })
 
 
