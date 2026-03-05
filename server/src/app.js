@@ -43,12 +43,11 @@ app.get("/test",(req,res)=>{
   return res.status(200).json({test:"successfull"})
 })
 
-if(process.env.NODE_ENV === "production"){
+
   app.use(express.static("public"));
   app.use((req, res) => {
     res.sendFile(resolve(__dirname,"..", "public", "index.html"));
   });
-}
  
 
 

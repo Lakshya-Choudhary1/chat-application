@@ -1,17 +1,14 @@
 import React, { useEffect } from 'react'
 import { useMessageStore } from '../../store/useMessageStore.js'
 import UsersLoadingSkeleton from "./UsersLoadingSkeleton.jsx"
-import NoChatFound from './NoChatFound.jsx';
 import userAvatar from "../../assets/user.png"
 
 const ContactList = () => {
-
   const {getAllContacts , allContacts , isUsersLoading , setSelectedUser} = useMessageStore();
 
   useEffect(()=>{
     getAllContacts();
   },[getAllContacts])
-
 
   if(isUsersLoading) return <UsersLoadingSkeleton /> 
 
