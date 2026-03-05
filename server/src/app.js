@@ -2,10 +2,9 @@ import express, { json, urlencoded } from "express";
 import cors from 'cors'
 import helmet from 'helmet'
 import cookieParser from 'cookie-parser';
-import {dirname,resolve} from 'path'
+import {dirname,resolve,join} from 'path'
 import {fileURLToPath} from 'url'
 import mainRouter from "./routes/main.route.js";
-
 const _filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(_filename);
 
@@ -54,10 +53,9 @@ app.get("/test",(req,res)=>{
   return res.status(200).json({test:"successfull"})
 })
 
-
-  app.use(express.static(resolve(__dirname, "../public")));
+  app.use(express.static(resolve(__dirname,'../public')))
   app.use((req, res) => {
-    res.sendFile(resolve(__dirname, "../public/index.html"));
+    res.sendFile(resolve(__dirname ,'../public','index.html'));
   });
 
  
