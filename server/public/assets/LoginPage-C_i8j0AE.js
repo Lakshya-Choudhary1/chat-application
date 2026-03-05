@@ -1,0 +1,1 @@
+import{j as e}from"./index-D9GGDfGo.js";const s=()=>e.jsx("div",{className:"h-full w-full flex justify-center items-center",children:e.jsx("h1",{className:"text-white text-2xl",children:"LoginPage"})});export{s as default};
