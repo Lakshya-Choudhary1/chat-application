@@ -14,16 +14,16 @@ const whitelist_urls = process.env.WHITELIST_URLS
   : [];
 
 //routes
-helmet({
-  contentSecurityPolicy: {
-    directives: {
-      defaultSrc: ["'self'"],
-      imgSrc: ["'self'", "data:", "https://res.cloudinary.com"],
-      scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'"],
-      styleSrc: ["'self'", "'unsafe-inline'"],
-    },
-  },
-})
+// helmet({
+//   contentSecurityPolicy: {
+//     directives: {
+//       defaultSrc: ["'self'"],
+//       imgSrc: ["'self'", "data:", "https://res.cloudinary.com"],
+//       scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'"],
+//       styleSrc: ["'self'", "'unsafe-inline'"],
+//     },
+//   },
+// })
 app.use(
   cors({
     origin: (origin, callback) => {
