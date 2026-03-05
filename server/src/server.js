@@ -13,18 +13,18 @@ const _dirname = dirname(fileURLToPath(import.meta.url));
 const PORT = process.env.PORT || 8000 ;
 const MONGO_URL = process.env.MONGO_URL;
 
-const sslOptions = {
-     cert : fs.readFileSync(path.join(_dirname,"..","cert.pem")),
-     key : fs.readFileSync(path.join(_dirname,"..","key.pem"))
-}
+// const sslOptions = {
+//      cert : fs.readFileSync(path.join(_dirname,"..","cert.pem")),
+//      key : fs.readFileSync(path.join(_dirname,"..","key.pem"))
+// }
 
 let server ;
 
-if(process.env.NODE_ENV === 'production'){
-     server = https.createServer(sslOptions,app);
-}else{
+// if(process.env.NODE_ENV === 'production'){
+//      server = https.createServer(sslOptions,app);
+// }else{
      server = http.createServer(app);
-}
+// }
 
 const startServer = async()=>{
      await connectDB(MONGO_URL);
