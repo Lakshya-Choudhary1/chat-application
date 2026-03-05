@@ -55,7 +55,7 @@ const publicPath = resolve(__dirname, "../public");
 
 app.use(express.static(publicPath));
 
-app.use((req, res) => {
+app.get(/.*/, (req, res) => {
   res.sendFile(join(publicPath, "index.html"));
 });
 
