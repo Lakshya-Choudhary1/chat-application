@@ -51,22 +51,17 @@ app.get("/test",(req,res)=>{
   return res.status(200).json({test:"successfull"})
 })
 
-const publicPath = resolve(__dirname, "../public");
+const publicPath = resolve(__dirname, "../../client/dist");
+console.log('Serving static files from:', publicPath);
 
-app.use(express.static(publicPath, {
-  setHeaders: (res, filePath) => {
-    if (filePath.endsWith('.css')) {
-      res.setHeader('Content-Type', 'text/css');
-    }
-    if (filePath.endsWith('.js')) {
-      res.setHeader('Content-Type', 'application/javascript');
-    }
-  }
-}));
+// Serve static files
+app.use(express.static(publicPath));
 
 app.use((req,res)=>{
-  res.sendFile(path.resolve(__dirname,'../public','index.html'))
+  res.sendFile(join(publicPath, "index.html"));
 })
+
+
 
 
   
