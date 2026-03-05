@@ -52,7 +52,7 @@ app.get("/test",(req,res)=>{
 })
 
 const publicPath = resolve(__dirname, "../public");
-
+app.use("/assets", express.static(join(publicPath, "assets")));
 app.use(express.static(publicPath));
 
 app.use((req, res) => {
