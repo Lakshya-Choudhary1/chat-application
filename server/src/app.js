@@ -53,11 +53,20 @@ app.get("/test",(req,res)=>{
 
 const publicPath = resolve(__dirname, "../public");
 
-app.use(express.static(publicPath));
+app.use(express.static(publicPath, {
+  setHeaders: (res, filePath) => {
+    if (filePath.endsWith('.css')) {
+      res.setHeader('Content-Type', 'text/css');
+    }
+    if (filePath.endsWith('.js')) {
+      res.setHeader('Content-Type', 'application/javascript');
+    }
+  }
+}));
 
-app.get(/.*/, (req, res) => {
-  res.sendFile(join(publicPath, "index.html"));
-});
+app.use((req,res)=>{
+  res.sendFile(path.resolve(__dirname,'../public','index.html'))
+})
 
 
   
