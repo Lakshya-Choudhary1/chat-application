@@ -2,11 +2,11 @@ import express, { json, urlencoded } from "express";
 import cors from 'cors'
 import helmet from 'helmet'
 import cookieParser from 'cookie-parser';
-import {dirname,resolve,join} from 'path'
-import {fileURLToPath} from 'url'
+import path from 'path'
+import url from 'url'
 import mainRouter from "./routes/main.route.js";
-const _filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(_filename);
+const _filename = url.fileURLToPath(import.meta.url);
+const __dirname = path.dirname(_filename);
 
 const app = express();
 const whitelist_urls = process.env.WHITELIST_URLS
@@ -51,14 +51,9 @@ app.get("/test",(req,res)=>{
   return res.status(200).json({test:"successfull"})
 })
 
-const publicPath = resolve(__dirname, "../../client/dist");
-console.log('Serving static files from:', publicPath);
-
-// Serve static files
-app.use(express.static(publicPath));
-
+app.use(express.static(path.join(__dirname , "../", "public")));
 app.get("/",(req,res)=>{
-  return res.sendFile(join(publicPath, "index.html"));
+     res.sendFile(path.join(__dirname,"../", "public", "index.html"));
 })
 
 
