@@ -14,16 +14,16 @@ const whitelist_urls = process.env.WHITELIST_URLS
   : [];
 
 // routes
-// helmet({
-//   contentSecurityPolicy: {
-//     directives: {
-//       defaultSrc: ["'self'"],
-//       imgSrc: ["'self'", "data:", "https://res.cloudinary.com"],
-//       scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'"],
-//       styleSrc: ["'self'", "'unsafe-inline'"],
-//     },
-//   },
-// })
+helmet({
+  contentSecurityPolicy: {
+    directives: {
+      defaultSrc: ["'self'"],
+      imgSrc: ["'self'", "data:", "https://res.cloudinary.com"],
+      scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'"],
+      styleSrc: ["'self'", "'unsafe-inline'"],
+    },
+  },
+})
 app.use(
   cors({
     origin: (origin, callback) => {
@@ -51,11 +51,13 @@ app.get("/test",(req,res)=>{
   return res.status(200).json({test:"successfull"})
 })
 
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static(path.join(__dirname, "../public")));
 
-app.use(express.static(path.join(__dirname , "../", "public")));
-app.get("/",(req,res)=>{
-     res.sendFile(path.join(__dirname,"../", "public", "index.html"));
-})
+  app.get(/.*/, (_, res) => {
+    return res.sendFile(path.join(__dirname, "../public/index.html"));
+  });
+}
 
 
 

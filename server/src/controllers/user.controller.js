@@ -46,10 +46,10 @@ export const login = async(req,res)=>{
           const isMatch = await bcrypt.compare(password,user.password);
           
           if(!isMatch){
-               return res.status(400).json({message:'invalid credentails'})
+               return res.status(400).json({message:'incorrect password'})
           }
           
-           generateTokenAndSetCookie(res,user._id);
+          generateTokenAndSetCookie(res,user._id);
 
 
           return res.status(200).json({user : {...user._doc,password:undefined} });
@@ -104,7 +104,7 @@ export const signup = async(req,res)=>{
 
           generateTokenAndSetCookie(res,savedUser._id);
 
-          await sendWelcomeEmail(savedUser.email ,savedUser.name , process.env.CLIENT_URI)
+          // await sendWelcomeEmail(savedUser.email ,savedUser.name , process.env.CLIENT_URI)
 
           return res.status(201).json({message:'user created',user:{...savedUser._doc,password:undefined}})
 

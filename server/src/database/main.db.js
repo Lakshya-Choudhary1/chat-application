@@ -13,7 +13,7 @@ const connectDB = async(string)=>{
           await mongoose.connect(string);
           console.log('Connected To Database.')
      }catch(error){
-          console.log('Connecting To Database Failed. \t',error.message);
+          console.log('Connecting To Database Failed. \t',error);
      }
 }
 
