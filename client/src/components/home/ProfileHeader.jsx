@@ -36,10 +36,10 @@ const ProfileHeader = () => {
 
 
   return (<div className=" relative border-b-2 border-slate-500 p-2">
-      <div className="flex items-center justify-around ">
+      <div className="flex items-center justify-start gap-4 ">
           {/* Avatar */}
           <div className="avatar avatar-online m-1 mr-0">
-            <button className="size-14
+            <button className="size-9
              rounded-full overflow-hidden relative group "
               onClick={()=>fileInputRef.current.click()}>
                   <img src={authUser.profilePic || avatar} alt="user image"
@@ -68,7 +68,7 @@ const ProfileHeader = () => {
           </div>
 
           {/* logout and sound btn */}
-          <div className="flex gap-x-3 items-center">
+          <div className="flex gap-x-3 items-center justify-center flex-1">
               <button className="text-slate-400 hover:text-slate-200 transition-colors"
               onClick={logout}>
                 <LogOutIcon className="size-5"/>

@@ -46,18 +46,25 @@ export const useMessageStore = create((set,get)=> ({
           }
      },
 
-     getMessages:async(id)=>{
+     getMessagesByUserId:async(id)=>{
           try{
+               console.log(id)
+               set({isMessageLoading:true})
                const res = await axiosInstance.get(`/message/${id}`);
-               set({message:res.data});
+               console.log("message send : ",res)
+               set({messages:res.data});
           }catch(err){
                console.log(err);
+          }finally{
+               set({isMessageLoading:false})
           }
      },
 
-     sendMessage:async(id,data)=>{
+     sendMessageToUserId:async(id,data)=>{
+          const {text,image} = data
           try{
-               const res = await axiosInstance.post(`/message/send/${id}`,data);
+               const res = await axiosInstance.post(`/message/send/${id}`,{text,image});
+               console.log(res.data)
                if(res.data){
                     toast.success("Message Sent Succesfull.")
                }

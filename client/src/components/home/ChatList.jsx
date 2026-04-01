@@ -29,7 +29,7 @@ const ChatList = () => {
           <img
             src={user.profilePic || userAvatar}
             alt={user.fullName}
-            className="size-11 rounded-full object-cover"
+            className="size-9 rounded-full object-cover"
           />
           <span className="absolute bottom-0 right-0 size-3 bg-green-500 border-2 border-slate-900 rounded-full"></span>
         </div>

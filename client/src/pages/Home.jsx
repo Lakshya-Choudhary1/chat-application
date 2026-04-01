@@ -13,7 +13,6 @@ import ChatContainer from "../components/home/ChatContainer.jsx";
 
 const Home = () => {
 
-  
   const {
     getMyChatPartners,
     getAllContacts,
@@ -32,7 +31,7 @@ const Home = () => {
         <div className="h-full w-full flex  overflow-hidden bg-slate-800/60 backdrop-blur-md text-white ">
 
           {/* LEFT SIDEBAR */}
-          <div className="w-80 flex flex-col  border-r-2  border-slate-600 ">
+          <div className="w-60 flex flex-col  border-r-2  border-slate-600 ">
 
             {/* Profile */}
             <ProfileHeader />

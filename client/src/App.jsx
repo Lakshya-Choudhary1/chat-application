@@ -58,38 +58,25 @@ const App = () =>{
             aria-hidden='true'
           />
           <div />
-
+          
+        <Suspense fallback={<Loading/>}>
           <Routes>
-            <Route path="/" element={
-              <Suspense fallback={<Loading/>}>
-                {!authUser ? 
-                  <Navigate to={"/login"} /> :
-                  <Home/> }
-              </Suspense>
-              } />
+            <Route path="/" element={!authUser ? <Navigate to={"/login"} replace/> :<Home/>} 
+            />
             <Route path="/login" 
-              element={<Suspense fallback={<Loading/>}>
-                  {!authUser ? 
-                    <LoginPage /> :
-                    <Navigate to={"/"} />}
-                </Suspense>} 
+              element={!authUser ? <LoginPage /> : <Navigate to={"/"} replace/>}
             />
             <Route path="/signup" 
-              element={<Suspense fallback={<Loading/>}>
-                  {!authUser ? <SignupPage /> : <Navigate to="/" />}
-                </Suspense>} 
+              element={!authUser ? <SignupPage /> : <Navigate to="/" replace/>}
             />
 
             <Route path="/loading" 
               element={<Loading />}
             />
 
-            <Route path="/*" 
-              element={<Suspense fallback={<Loading/>}>
-                  <ForbiddenPage/>
-                </Suspense>} 
-            />
+            <Route path="/*" element={<ForbiddenPage/>}/>
           </Routes>
+        </Suspense>
           <Toaster />
   </section>
 }

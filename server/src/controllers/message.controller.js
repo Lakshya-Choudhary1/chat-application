@@ -14,7 +14,7 @@ export const getAllContacts = async(req,res) =>{
 
 export const getChatPartners = async (req, res) => {
   try {
-    const userId = req.user.id;
+    const userId = req.user._id;
     const senderPartners = await Message.distinct("receiverId", {
       senderId: userId
     });
@@ -37,7 +37,7 @@ export const getChatPartners = async (req, res) => {
 
 export const getMessagesByUserId = async(req,res) =>{
      try{
-          const myId = req.user.id;
+          const myId = req.user._id;
           const userId = req.params.id;
           const messages = await Message.find({
                $or:[
@@ -54,7 +54,7 @@ export const getMessagesByUserId = async(req,res) =>{
 
 export const sendMessage = async(req,res) =>{
      try{
-          const senderId = req.user.id;
+          const senderId = req.user._id;
           const receiverId = req.params.id;
           const {text,image} = req.body;
           if(!text && !image){
