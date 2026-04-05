@@ -3,10 +3,12 @@ import { useMessageStore } from '../../store/useMessageStore.js'
 import UsersLoadingSkeleton from "./UsersLoadingSkeleton.jsx"
 import NoChatFound from './NoChatFound.jsx';
 import userAvatar from "../../assets/user.png"
+import {useAuthStore} from "../../store/useAuthStore.js"
 
 const ChatList = () => {
 
   const {getMyChatPartners , chatPartners , isUsersLoading , setSelectedUser} = useMessageStore();
+  const {onlineUsers} = useAuthStore();
 
   useEffect(()=>{
     getMyChatPartners();
@@ -31,7 +33,7 @@ const ChatList = () => {
             alt={user.fullName}
             className="size-9 rounded-full object-cover"
           />
-          <span className="absolute bottom-0 right-0 size-3 bg-green-500 border-2 border-slate-900 rounded-full"></span>
+          <span className={`absolute bottom-0 right-0 size-3 ${onlineUsers.includes(user._id) ? "bg-green-500 border-2 " : "bg-transparent"} border-slate-900 rounded-full`}></span>
         </div>
 
         {/* User Info */}

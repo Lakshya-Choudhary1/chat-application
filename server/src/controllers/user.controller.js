@@ -1,7 +1,6 @@
 import bcrypt from "bcryptjs";
 import userModel from "../models/user.model.js";
 import generateTokenAndSetCookie from "../utils/generateTokenAndSetCookie.js";
-import {sendWelcomeEmail} from "../utils/emails/emailHandler.js"
 import cloudinary from "../lib/cloudinary.js";
 
 export const updateProfile = async(req,res) =>{

@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { axiosInstance } from "../lib/axios.js";
 import {toast} from "react-hot-toast"
-
+import { useAuthStore } from "./useAuthStore.js";
 
 export const useMessageStore = create((set,get)=> ({
      allContacts:[],
@@ -13,6 +13,39 @@ export const useMessageStore = create((set,get)=> ({
      isMessageLoading:false,
      isSoundEnable: JSON.parse(localStorage.getItem("isSoundEnable")) === true,
 
+     subscribeToMessages: () => {
+     const { selectedUser, isSoundEnable } = get();
+     if (!selectedUser) return;
+
+     const socket = useAuthStore.getState().socket;
+
+     socket.off("new-message"); // ✅ prevent duplicate listeners
+
+     socket.on("new-message", (data) => {
+     const { message } = data;
+     const { selectedUser } = get();
+
+     if (
+          message.senderId === selectedUser._id ||
+          message.receiverId === selectedUser._id
+     ) {
+          set((state) => ({
+          messages: [...state.messages, message],
+          }));
+     }
+
+     if (isSoundEnable) {
+          const audio = new Audio("/sounds/mouse-click-sound.mp3");
+          audio.currentTime = 0;
+          audio.play();
+     }
+     });
+     },
+
+unsubscribeToMessages: () => {
+  const socket = useAuthStore.getState().socket;
+  socket.off("new-message");
+},
      toggleSound: ()=>{
           localStorage.setItem("isSoundEnable",!get().isSoundEnable)
           set({isSoundEnable: !get().isSoundEnable})
@@ -44,6 +77,7 @@ export const useMessageStore = create((set,get)=> ({
           }finally{
                set({isUserLoading:false});
           }
+          
      },
 
      getMessagesByUserId:async(id)=>{
@@ -68,6 +102,9 @@ export const useMessageStore = create((set,get)=> ({
                if(res.data){
                     toast.success("Message Sent Succesfull.")
                }
+               set((state)=>({
+                    messages:[...state.messages,res.data]
+               }))
 
           }catch(err){
                console.log(err)

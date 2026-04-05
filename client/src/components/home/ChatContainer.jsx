@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import { useMessageStore } from "../../store/useMessageStore.js";
+import { useAuthStore } from "../../store/useAuthStore.js";
 import userAvatar from "../../assets/user.png";
 import { X } from "lucide-react";
 import NoChatHistoryPlaceholder from "./NoChatHistoryPlaceholder.jsx";
@@ -11,7 +12,11 @@ const ChatContainer = () => {
     setSelectedUser,
     messages,
     getMessagesByUserId,
+    subscribeToMessages,
+    unsubscribeToMessages,
   } = useMessageStore();
+
+  const { authUser } = useAuthStore();
 
   const bottomRef = useRef(null);
 
@@ -21,16 +26,21 @@ const ChatContainer = () => {
     }
   };
 
+  // ✅ REAL-TIME FIXED EFFECT
   useEffect(() => {
     if (!selectedUser) return;
 
     getMessagesByUserId(selectedUser._id);
+    subscribeToMessages();
     window.addEventListener("keydown", handleEscKey);
 
-    return () => window.removeEventListener("keydown", handleEscKey);
+    return () => {
+      unsubscribeToMessages();
+      window.removeEventListener("keydown", handleEscKey);
+    };
   }, [selectedUser]);
 
-  // ✅ Auto scroll
+  // ✅ AUTO SCROLL FIXED
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
@@ -70,21 +80,21 @@ const ChatContainer = () => {
         {messages.length === 0 ? (
           <NoChatHistoryPlaceholder name={selectedUser.fullName} />
         ) : (
-          <div className=" mx-auto space-y-4">
+          <div className="mx-auto space-y-4">
             {messages.map((msg) => (
               <div
                 key={msg._id}
                 className={`flex ${
-                  msg.senderId === selectedUser._id
-                    ? "justify-start"
-                    : "justify-end"
+                  msg.senderId === authUser._id
+                    ? "justify-end"   // ✅ YOUR messages
+                    : "justify-start" // ✅ OTHER user
                 }`}
               >
                 <div
                   className={`max-w-xs md:max-w-md p-3 rounded-2xl ${
-                    msg.senderId === selectedUser._id
-                      ? "bg-slate-800 text-slate-200"
-                      : "bg-cyan-600 text-white"
+                    msg.senderId === authUser._id
+                      ? "bg-cyan-600 text-white"
+                      : "bg-slate-800 text-slate-200"
                   }`}
                 >
                   {msg.image && (
@@ -99,9 +109,9 @@ const ChatContainer = () => {
 
                   <p
                     className={`text-xs mt-1 ${
-                      msg.senderId === selectedUser._id
-                        ? "text-slate-400"
-                        : "text-white/70 text-right"
+                      msg.senderId === authUser._id
+                        ? "text-white/70 text-right"
+                        : "text-slate-400"
                     }`}
                   >
                     {new Date(msg.createdAt).toLocaleTimeString([], {

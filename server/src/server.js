@@ -1,36 +1,44 @@
 import http from "http";
-import https from "https";
 import "dotenv/config";
 import app from "./app.js"
 import connectDB from "./database/main.db.js";
-import fs from "fs";
-import path,{dirname} from "path";
-import {fileURLToPath} from "url";
-
-const _dirname = dirname(fileURLToPath(import.meta.url));
-
+import {Server} from "socket.io";
+import * as socket from "./socket.js"
 
 const PORT = process.env.PORT || 8000 ;
 const MONGO_URL = process.env.MONGO_URL;
+const whitelist_urls = process.env.WHITELIST_URLS
+  ? process.env.WHITELIST_URLS.replace(/[\[\]\s]/g, "").split(",")
+  : [];
 
-// const sslOptions = {
-//      cert : fs.readFileSync(path.join(_dirname,"..","cert.pem")),
-//      key : fs.readFileSync(path.join(_dirname,"..","key.pem"))
-// }
 
-let server ;
+const server = http.createServer(app)
+export const io = new Server(server,{
+     cors:{
+          origin: (origin, callback) => {
+          if (!origin) return callback(null, true);
 
-// if(process.env.NODE_ENV === 'production'){
-//      server = https.createServer(sslOptions,app);
-// }else{
-     server = http.createServer(app);
-// }
+          if (
+               whitelist_urls.length === 0 ||
+               whitelist_urls.includes(origin)
+          ) {
+               return callback(null, true);
+          }
+          callback(new Error("CORS ERROR: Origin not allowed"));
+     },
+          credentials: true,
+     }
+})
+
+
 
 const startServer = async()=>{
      await connectDB(MONGO_URL);
+     socket.listen(io);
      server.listen(PORT,()=>{
           console.log(`Server Is Listening....${PORT}`)
-     })    
+     }) 
+      
      
 }
 

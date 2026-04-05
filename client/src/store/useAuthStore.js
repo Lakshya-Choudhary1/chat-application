@@ -1,13 +1,18 @@
 import { create } from "zustand";
 import { axiosInstance } from "../lib/axios.js";
 import toast from "react-hot-toast";
+import { io } from "socket.io-client";
+
+const BaseUrl = import.meta.env.MODE === "development" ?  "http://localhost:3000/messages" : `${window.location.origin}/messages`; ;
 
 export const useAuthStore = create((set, get) => ({
   authUser: null,
   isCheckingAuth: false,
   isSigningUp: false,
   isLoggingUp:false,
-  
+  socket:null,
+  onlineUsers:[],
+
   updateProfile: async(data)=>{
     try{
       const res = await axiosInstance.put("/user/update-profile",data);
@@ -38,7 +43,9 @@ export const useAuthStore = create((set, get) => ({
   logout:  async()=> {
     try{
       await axiosInstance.post("/user/logout");
+      get().disconnectSocket();
       toast.success("LogOut Successfully.")
+      
     }catch(err){
       console.log(err);
     } finally{
@@ -65,6 +72,7 @@ export const useAuthStore = create((set, get) => ({
     try {
       const res = await axiosInstance.get("/user/check-auth");
       set({ authUser: res.data.user});
+      get().connectSocket();
       toast.success(`WELCOME`);
     } catch (err) {
       console.log(err)
@@ -72,4 +80,43 @@ export const useAuthStore = create((set, get) => ({
       set({isCheckingAuth:false});
     }
   },
+
+  connectSocket: () => {
+  const { authUser, socket } = get();
+
+  if (!authUser || socket?.connected) return;
+
+  const newSocket = io(BaseUrl, {
+    withCredentials: true,
+    transports: ["websocket"], // 🔥 important
+  });
+
+  set({ socket: newSocket });
+
+  // ✅ use newSocket everywhere
+  newSocket.on("connect", () => {
+    console.log("✅ Connected:", newSocket.id);
+  });
+
+  newSocket.on("online-users", (userIds) => {
+    const uniqueUsers = [...new Set(userIds)];
+    set({ onlineUsers: uniqueUsers });
+  });
+
+  newSocket.on("connect_error", (err) => {
+    console.log("❌ CONNECTION ERROR:", err.message);
+  });
+
+  newSocket.on("disconnect", () => {
+    console.log("❌ Disconnected");
+  });
+},
+
+  disconnectSocket: () => {
+    const {socket} = get(); 
+    if(socket){
+      get().socket.disconnect();
+      set({socket:null});
+    } 
+  }
 }));

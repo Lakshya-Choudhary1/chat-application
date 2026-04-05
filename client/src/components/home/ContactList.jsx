@@ -22,14 +22,12 @@ const ContactList = () => {
         className="flex items-center gap-4 px-2 py-1 rounded-2xl cursor-pointer  hover:bg-cyan-500/10 transition-all duration-200"
       >
         {/* Avatar */}
-        <div className="relative">
+        
           <img
             src={user.profilePic || userAvatar}
             alt={user.fullName}
             className="size-9 rounded-full object-cover"
           />
-          <span className="absolute bottom-0 right-0 size-3 bg-green-500 border-2 border-slate-900 rounded-full"></span>
-        </div>
 
         {/* User Info */}
         <div className="flex-1 min-w-0">

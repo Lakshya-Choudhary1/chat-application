@@ -1,7 +1,7 @@
 import { lazy, Suspense, useEffect } from "react"
-import {Routes, Route, Navigate, useLoaderData, useLocation } from "react-router-dom"
+import {Routes, Route, Navigate} from "react-router-dom"
 import {motion} from "framer-motion";
-import toast,{Toaster} from "react-hot-toast";
+import {Toaster} from "react-hot-toast";
 import Loading from "./pages/util/Loading.jsx"
 
 import { useAuthStore } from "./store/useAuthStore.js";
@@ -11,9 +11,11 @@ const LoginPage = lazy(()=>import("./pages/auth/LoginPage.jsx") )
 const SignupPage = lazy(()=>import("./pages/auth/SignupPage.jsx") )
 const Home = lazy(()=>import("./pages/Home.jsx"));
 
+
+
 const App = () =>{
   
-  const {checkAuth , isCheckingAuth , authUser} = useAuthStore();
+  const {checkAuth , isCheckingAuth , authUser , connectSocket} = useAuthStore();
   useEffect(()=>{
     checkAuth();
   },[])
