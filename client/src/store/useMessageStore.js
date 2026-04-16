@@ -19,7 +19,7 @@ export const useMessageStore = create((set,get)=> ({
 
      const socket = useAuthStore.getState().socket;
 
-     socket.off("new-message"); // ✅ prevent duplicate listeners
+     socket.off("new-message");
 
      socket.on("new-message", (data) => {
      const { message } = data;
