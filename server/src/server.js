@@ -38,8 +38,6 @@ const startServer = async()=>{
      server.listen(PORT,()=>{
           console.log(`Server Is Listening....${PORT}`)
      }) 
-      
-     
 }
 
 startServer();
