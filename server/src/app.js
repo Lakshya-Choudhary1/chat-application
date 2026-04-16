@@ -14,7 +14,7 @@ const whitelist_urls = process.env.WHITELIST_URLS
   : [];
 
 // routes
-helmet({
+app.use(helmet({
   contentSecurityPolicy: {
     directives: {
       defaultSrc: ["'self'"],
@@ -23,7 +23,7 @@ helmet({
       styleSrc: ["'self'", "'unsafe-inline'"],
     },
   },
-})
+}));
 app.use(
   cors({
     origin: (origin, callback) => {
@@ -52,11 +52,13 @@ app.get("/test",(req,res)=>{
 })
 
 if (process.env.NODE_ENV === "production") {
-  app.use(express.static(path.join(__dirname, "../public")));
+  const publicPath = path.join(__dirname, "..", "public");
 
-  app.use("/",(req,res)=>{
-    return res.sendFile(path.join(__dirname, "../public/index.html"));
-  })
+  app.use(express.static(publicPath));
+
+  app.use((req, res) => {
+    res.sendFile(path.join(publicPath, "index.html"));
+  });
 }
 
 export default app;
